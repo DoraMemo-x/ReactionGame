@@ -10,7 +10,7 @@ static long beginMillis = -1;
 static byte pTarget = -1;
 
 // Game Variables (Variables that are native to game logic)
-GameMode *gm; // GameMode base object (pointer) for polymorphism
+Game *game; // Game base object (pointer) for polymorphism
 
 /**
    Determine game mode
@@ -26,10 +26,10 @@ void setupGame() {
     default:
     case Classic: {
         ModeClassic mc;
-        gm = &mc;
-        gm->score = 100;
+        game = &mc;
+        game->score = 100;
 
-        randomizeTarget(CRGB::Green);
+        game->randomizeTarget(CRGB::Green);
         break;
       }
 
@@ -37,10 +37,10 @@ void setupGame() {
 
     case Debut: {
         ModeDebut md;
-        gm = &md;
-        gm->score = 90;
+        game = &md;
+        game->score = 90;
 
-        randomizeTarget(CRGB::Green);
+        game->randomizeTarget(CRGB::Green);
         break;
       }
 
@@ -57,11 +57,7 @@ void setupGame() {
       break;
   }
 
-  //  gm->setState(State::Init);
-}
-
-void setBeginMillis() {
-  beginMillis = millis();
+  //  game->setState(State::Init);
 }
 
 void ModeClassic::clickLogic() {
@@ -75,7 +71,7 @@ void ModeClassic::clickLogic() {
         // On CORRECT button click, change target; add 1 score; turn off current light
         score += this->scoreMultiplier;
         b->setColour(CRGB::Black);
-        randomizeTarget(CRGB::Green);
+        this->randomizeTarget(CRGB::Green);
 
         delay(20); // delay a bit to avoid bouncing
       } else {
@@ -132,7 +128,7 @@ void ModeClassic::updateState() {
    Sets the colour of the target block's led to specified tColour
    @param tColour the colour of the target block's led
 */
-void randomizeTarget(CRGB tColour) {
+void Game::randomizeTarget(CRGB tColour) {
   byte target;
   do {
     target = byte(random(0, NUM_BLOCKS));
@@ -165,10 +161,16 @@ void ModeDebut::updateState() {
 
 /////////////////////////////
 
+
+
+void setBeginMillis() {
+  beginMillis = millis();
+}
+
 Mode indexToMode(int index) {
   return static_cast<Mode>(index);
 }
 
 int getSecondsRemaining() {
-  return int((gm->stageMs - (millis() - beginMillis)) / 1000);
+  return int((game->stageMs - (millis() - beginMillis)) / 1000);
 }

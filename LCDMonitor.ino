@@ -9,7 +9,7 @@ void setupMonitor() {
   lcd.init();
   lcd.backlight();
 
-  switch (gm->getMode()) {
+  switch (game->getMode()) {
 //    default:
     case Classic:
       lcd.setCursor(5, 0);
@@ -48,8 +48,8 @@ void setupMonitor() {
 }
 
 void updateMonitor() {
-  updateStage(gm->stage, getSecondsRemaining());
-  updateScore(gm->score, gm->stageReq);
+  updateStage(game->stage, getSecondsRemaining());
+  updateScore(game->score, game->stageReq);
 }
 
 void updateTime(int timeRemain) {
@@ -110,16 +110,16 @@ void ModeClassic::gameOverScreen() {
   lcd.setCursor(3, 0);
   lcd.print("Game Over!");
 
-  if (gm->score < 10) lcd.setCursor(2, 1);
+  if (game->score < 10) lcd.setCursor(2, 1);
   else lcd.setCursor(1, 1);
   lcd.print("Stg ");
-  lcd.print(gm->stage + 1);
+  lcd.print(game->stage + 1);
 
   lcd.print(", ");
-  if (gm->score <= 1 || (gm->score >= 10 && gm->score < 100)) lcd.print(" "); // print extra space for alignment
-  lcd.print(gm->score);
+  if (game->score <= 1 || (game->score >= 10 && game->score < 100)) lcd.print(" "); // print extra space for alignment
+  lcd.print(game->score);
   lcd.print(" pt");
-  if (gm->score > 1) lcd.print("s");
+  if (game->score > 1) lcd.print("s");
 }
 
 void ModeClassic::frenzyScreen() {

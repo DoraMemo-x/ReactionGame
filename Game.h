@@ -3,7 +3,7 @@
 
 // ---------- Includes -------------
 
-
+//#include <FastLED.h>
 
 // ---------- Constants ----------------
 
@@ -21,8 +21,7 @@ enum Mode {
   Classic,
   Debut,
   Versus,
-  Colours,
-  RETURN
+  Colours
 };
 
 //enum ScoreSystem {
@@ -31,9 +30,8 @@ enum Mode {
 
 // ------------------ Classes --------------------
 
-class GameMode {
+class Game {
   public:
-//    Mode mode = RETURN;
     byte score = 0;
     byte stage = 0;
     unsigned int stageMs;
@@ -51,9 +49,10 @@ class GameMode {
     // Constructors
 
     // Function declarations
+    virtual void randomizeTarget(CRGB tColour);
     virtual void clickLogic() = 0;
     virtual void updateState();
-    virtual void updateStage(byte stage, unsigned int ms[], byte req[], byte multi[], byte penalty[]) {
+    virtual void updateStage(byte stage, const unsigned int ms[], const byte req[], const byte multi[], const byte penalty[]) {
       stageMs = ms[stage];
       stageReq = req[stage];
       scoreMultiplier = multi[stage];
@@ -76,10 +75,8 @@ class GameMode {
     State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
 };
 
-class ModeClassic : public GameMode {
+class ModeClassic : public Game {
   public:
-    Mode mode = Classic;
-
     // Constructors
     ModeClassic() {
       stage = 0;
@@ -115,8 +112,6 @@ class ModeClassic : public GameMode {
 
 class ModeDebut : public ModeClassic {
   public:
-    Mode mode = Debut;
-  
     // Enums
     enum State {
       Init,
@@ -124,7 +119,7 @@ class ModeDebut : public ModeClassic {
       GameOver
     };
 
-    void updateStage(byte stage, unsigned int ms[], byte req[]) {
+    void updateStage(byte stage, const unsigned int ms[], const byte req[]) {
       stageMs = ms[stage];
       stageReq = req[stage];
     }
@@ -154,14 +149,14 @@ class ModeDebut : public ModeClassic {
 
 // --------------- Extern Variables ---------------
 
-extern GameMode *gm;
+extern Game *game;
 extern int score;
 
 // -------------------- Function declarations -----------------
 
 void setupGame();
 
-void randomizeTarget(CRGB tColour);
+void setBeginMillis();
 Mode indexToMode(int index);
 int getSecondsRemaining();
 

@@ -26,9 +26,9 @@ void loop() {
 //  updateMode();
 
   // Only applicable when not game over
-  if (!gm->isGameOver()) {
-    gm->clickLogic();
-    gm->updateState();
+  if (!game->isGameOver()) {
+    game->clickLogic();
+    game->updateState();
 
     if (millis() - timer > 1000) {
       timer = millis();
