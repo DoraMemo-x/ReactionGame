@@ -6,16 +6,16 @@
 static const byte BUTTON_PINS[] = {2, 3, 4, 5, 6, 7}; // NOTE: static use: limit scope
 static const byte MODE_BUTTON_PIN = A0;
 
-Block blocks[NUM_BLOCKS];
+Block *blocks[NUM_BLOCKS];
 byte modeInput = 0;
 static boolean pModeBtnState = false, modeBtnState = false;
 
 
 
-Block::Block() {}
 Block::Block(int btn, int led) {
   buttonPin = btn;
   ledIndex = led;
+  this->colour = CRGB::Black;
 }
 boolean Block::isTriggered() {
   return this->btnState && !this->pBtnState;
@@ -47,14 +47,21 @@ int Block::getButtonPin() {
 
 
 void setupInput() {
-  for (int i = 0; i < NUM_BLOCKS; i++) {
+  for (byte i = 0; i < NUM_BLOCKS; i++) {
     pinMode(BUTTON_PINS[i], INPUT);
     digitalWrite(BUTTON_PINS[i], HIGH); // turn on pullup resistor (is this how it's done?)
 
-    blocks[i] = Block(BUTTON_PINS[i], i);
+    blocks[i] = new Block(BUTTON_PINS[i], i);
+    blocks[i]->setColour(CRGB::Black);
   }
 
   pinMode(A0, INPUT);
+}
+
+void lightUp(CRGB colour) {
+  for (byte i = 0; i < NUM_BLOCKS; i++) {
+    blocks[i]->setColour(colour);
+  }
 }
 
 void updateMode() {
@@ -62,14 +69,16 @@ void updateMode() {
   modeBtnState = !digitalRead(A0);
 
   if (modeBtnState && !pModeBtnState) {
-        modeInput = (modeInput + 1) % (sizeof(Mode) / sizeof(int));
+    modeInput = (modeInput + 1) % (RETURN);
+
+    lightUp(CRGB::Black);
     setupGame();
-//    setupMonitor();
-//
-//    setBeginMillis();
-//    updateTime(getSecondsRemaining());
-//
-//    showLed();
+    setupMonitor();
+
+    setBeginMillis();
+    updateTime(getSecondsRemaining());
+
+    showLed();
   }
 }
 

@@ -4,6 +4,7 @@
 // ---------- Includes -------------
 
 //#include <FastLED.h>
+#include "InputHandler.h"
 
 // ---------- Constants ----------------
 
@@ -15,13 +16,17 @@ static const byte CLASSIC_SCORE_PENALTY[] = {1, 1, 2, 0};
 static const unsigned int DEBUT_STAGE_MS[] = {12500, 18000, 22000};
 static const byte DEBUT_STAGE_REQ[] = {13, 25 + DEBUT_STAGE_REQ[0], 255}; // Accumulative score
 
+static const unsigned int VERSUS_STAGE_MS[] = {20000, 20000, 15000};
+static const byte VERSUS_STAGE_REQ[] = {15, 20, 25}; // Not accumulative.
+
 // ----------- Enums --------------
 
 enum Mode {
   Classic,
   Debut,
   Versus,
-  Colours
+  Colours,
+  RETURN
 };
 
 //enum ScoreSystem {
@@ -31,7 +36,7 @@ enum Mode {
 // ------------------ Classes --------------------
 
 class Game {
-  public:
+  public:  
     byte score = 0;
     byte stage = 0;
     unsigned int stageMs;
@@ -47,6 +52,9 @@ class Game {
     };
 
     // Constructors
+    Game() {
+      state = Init;
+    }
 
     // Function declarations
     virtual void randomizeTarget(CRGB tColour);
@@ -67,7 +75,6 @@ class Game {
     virtual Mode getMode() = 0;
     virtual boolean isGameOver() = 0;
 
-    //    virtual void setupScreen() = 0;
     //    virtual void runningScreen() = 0;
     virtual void gameOverScreen() = 0;
 
@@ -75,10 +82,13 @@ class Game {
     State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
 };
 
+
+
 class ModeClassic : public Game {
   public:
     // Constructors
     ModeClassic() {
+      state = Init;
       stage = 0;
       score = 0;
       updateStage(stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
@@ -110,6 +120,8 @@ class ModeClassic : public Game {
     State state;
 };
 
+
+
 class ModeDebut : public ModeClassic {
   public:
     // Enums
@@ -130,6 +142,7 @@ class ModeDebut : public ModeClassic {
 
     // Constructors
     ModeDebut() {
+      state = Init;
       stage = 0;
       score = 0;
       scoreMultiplier = 1;
@@ -141,6 +154,41 @@ class ModeDebut : public ModeClassic {
 
     Mode getMode() {
       return Debut;
+    }
+
+  protected:
+    State state;
+};
+
+
+
+class ModeVersus : public Game {
+  public:
+  // "stage" is used as number of rounds
+  
+  // Constructors
+    ModeVersus() {
+      stageMs = 30000;
+    }
+
+    // Enums
+    enum State {
+      Init,
+      Ongoing,
+      GameOver
+    };
+
+    void clickLogic();
+    void updateState();
+    boolean isGameOver() {
+      return state == GameOver;
+    }
+
+    void ongoingScreen();
+    void gameOverScreen();
+
+    Mode getMode() {
+      return Versus;
     }
 
   protected:

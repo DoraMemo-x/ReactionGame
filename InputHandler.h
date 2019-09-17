@@ -20,7 +20,6 @@ class Block {
     CRGB colour;
     
     // Constructor
-    Block();
     Block(int btn, int led);
 
     // Functions
@@ -40,7 +39,7 @@ class Block {
 
 // --------------- Extern Variables ---------------
 
-extern Block blocks[NUM_BLOCKS];
+extern Block *blocks[NUM_BLOCKS];
 extern byte modeInput;
 
 // ---------------- Function Prototypes ---------------

@@ -8,6 +8,7 @@ void setup() {
 
   setupLed();
   setupInput();
+  
   setupGame();
   setupMonitor();
 
@@ -21,9 +22,7 @@ long timer = 0;
 boolean doPrint = false;
 
 void loop() {
-  //  showLed();
-  //  updateMonitor();
-//  updateMode();
+  updateMode();
 
   // Only applicable when not game over
   if (!game->isGameOver()) {

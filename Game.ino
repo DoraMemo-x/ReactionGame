@@ -15,32 +15,33 @@ Game *game; // Game base object (pointer) for polymorphism
 /**
    Determine game mode
 */
-void setupGame() {
+void setupGame() {  
   randomSeed(analogRead(A1));
   beginMillis = millis();
 
-  Mode m = Classic;
-//  Mode m = static_cast<Mode>(modeInput);
+  Mode m = static_cast<Mode>(modeInput);
 
   switch (m) {
-    default:
+//    default:
     case Classic: {
-        ModeClassic mc;
-        game = &mc;
+        ModeClassic *mc = new ModeClassic();
+        game = mc;
         game->score = 100;
 
         game->randomizeTarget(CRGB::Green);
+        game->setState(Game::State::Init);
         break;
       }
 
     ////////////////////////////
 
     case Debut: {
-        ModeDebut md;
-        game = &md;
+        ModeDebut *md = new ModeDebut();
+        game = md;
         game->score = 90;
 
         game->randomizeTarget(CRGB::Green);
+        game->setState(Game::State::Init);
         break;
       }
 
@@ -60,68 +61,6 @@ void setupGame() {
   //  game->setState(State::Init);
 }
 
-void ModeClassic::clickLogic() {
-  for (int i = 0; i < NUM_BLOCKS; i++) {
-    Block *b = &blocks[i];
-
-    b->storeInput();
-
-    if (b->isTriggered()) {
-      if (b->equals(CRGB::Green)) {
-        // On CORRECT button click, change target; add 1 score; turn off current light
-        score += this->scoreMultiplier;
-        b->setColour(CRGB::Black);
-        this->randomizeTarget(CRGB::Green);
-
-        delay(20); // delay a bit to avoid bouncing
-      } else {
-        // On WRONG click, remove score, incur minor delay
-        if (state == ModeClassic::State::Frenzy) {
-          this->state = ModeClassic::State::GameOver;
-          // Play Game Over Screen
-          this->gameOverScreen();
-          return;
-        }
-
-        score = max(score - this->scorePenalty, 0);
-        delay(25);
-      }
-
-      updateScore(score, stageReq);
-      showLed();
-    }
-  }
-}
-
-/**
-   Determines game state (Win/Loss, Advance to next stage, etc.)
-   and reflect the suitable changes.
-*/
-void ModeClassic::updateState() {
-  // Time's up
-  if (this->state != ModeClassic::State::GameOver && millis() - beginMillis > this->stageMs) {
-    // Advance_stage or Game Over
-    if (this->score >= this->stageReq) {
-      this->stage++;
-      this->updateStage(this->stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
-      updateMonitor();
-
-      // Frenzy
-      if (this->stage == sizeof(CLASSIC_STAGE_REQ) / sizeof(byte) - 1) {
-        this->state = ModeClassic::State::Frenzy;
-        // Play Frenzy monitor
-        this->frenzyScreen();
-      }
-
-      beginMillis = millis();
-    } else {
-      this->state = ModeClassic::State::GameOver;
-      // Play Game Over Screen
-      this->gameOverScreen();
-    }
-  }
-}
-
 /**
    Choose a new random target that does not equal to the previous target,
    in the range of 0 ~ NUM_BLOCKS.
@@ -134,29 +73,9 @@ void Game::randomizeTarget(CRGB tColour) {
     target = byte(random(0, NUM_BLOCKS));
   } while (target == pTarget);
 
-  blocks[target].setColour(tColour);
+  blocks[target]->setColour(tColour);
 
   pTarget = target;
-}
-
-
-
-void ModeDebut::updateState() {
-  // Time's up
-  if (this->state != ModeDebut::State::GameOver && millis() - beginMillis > this->stageMs) {
-    // Advance_stage or Game Over
-    if (this->score >= this->stageReq) {
-      this->stage++;
-      this->updateStage(this->stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
-      updateMonitor();
-
-      beginMillis = millis();
-    } else {
-      this->state = ModeDebut::State::GameOver;
-      // Play Game Over Screen
-      this->gameOverScreen();
-    }
-  }
 }
 
 /////////////////////////////

@@ -43,7 +43,7 @@ void setupMonitor() {
 
   delay(1500);
 
-  countdown();
+//  countdown();
   updateMonitor();
 }
 
@@ -60,7 +60,7 @@ void updateTime(int timeRemain) {
   lcd.print(" s)");
 }
 
-static void updateStage(int stage, int timeRemain) {
+void updateStage(int stage, int timeRemain) {
   clearLine(0);
   lcd.setCursor(0, 0);
   lcd.print("Stage: ");
@@ -70,7 +70,7 @@ static void updateStage(int stage, int timeRemain) {
   lcd.print(" s)");
 }
 
-static void updateScore(int score, int req) {
+void updateScore(int score, int req) {
   clearLine(1);
   lcd.setCursor(0, 1);
   lcd.print("Score: ");
@@ -84,7 +84,6 @@ static void clearLine(int i) {
   lcd.print("                ");
 }
 
-//static int countdownTimer = 3000;
 void countdown() {
   clearLine(0);
   clearLine(1);
@@ -130,4 +129,10 @@ void ModeClassic::frenzyScreen() {
   lcd.print("!Sudden Death!");
   delay(2000);
   updateMonitor();
+}
+
+
+
+void ModeVersus::ongoingScreen() {
+  
 }
