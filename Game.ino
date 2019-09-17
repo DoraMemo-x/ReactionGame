@@ -6,8 +6,7 @@
 
 
 // Functional Variables  (Variables that has a lower level usage. Not intuitive)
-static long beginMillis = -1;
-static byte pTarget = -1;
+static unsigned long beginMillis = -1;
 
 // Game Variables (Variables that are native to game logic)
 Game *game; // Game base object (pointer) for polymorphism
@@ -30,8 +29,7 @@ void setupGame() {
         game = mc;
         game->score = 100;
 
-        game->randomizeTarget(CRGB::Green);
-        game->setState(Game::State::Init);
+        game->setupGame();
         break;
       }
 
@@ -42,8 +40,7 @@ void setupGame() {
         game = md;
         game->score = 90;
 
-        game->randomizeTarget(CRGB::Green);
-        game->setState(Game::State::Init);
+        game->setupGame();
         break;
       }
 
@@ -52,6 +49,8 @@ void setupGame() {
     case Versus: {
         ModeVersus *mv = new ModeVersus();
         game = mv;
+
+        game->setupGame();
         break;
       }
 
@@ -75,7 +74,7 @@ void Game::randomizeTarget(CRGB tColour) {
   byte target;
   do {
     target = byte(random(0, NUM_BLOCKS));
-  } while (target == pTarget);
+  } while (target == this->pTarget);
 
   blocks[target]->setColour(tColour);
 

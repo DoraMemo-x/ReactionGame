@@ -27,7 +27,6 @@ void loop() {
     game->updateState();
 
     game->updateScreenTimeRemaining();
-    
   }
 }
 

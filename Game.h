@@ -67,6 +67,11 @@ class Game {
     }
 
     // Function declarations
+    virtual void setupGame() {
+      randomizeTarget(CRGB::Green);
+      state = Init;
+    }
+    
     virtual void randomizeTarget(CRGB tColour);
     virtual void clickLogic() = 0;
     virtual void updateState();
@@ -96,6 +101,7 @@ class Game {
 
   protected:
     State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
+    byte pTarget = -1;
 
   private:
     unsigned long secTimer = 0;
@@ -121,16 +127,16 @@ class ModeClassic : public Game {
       GameOver
     };
 
-    void clickLogic();
-    void updateState();
-    boolean isGameOver() {
+    void clickLogic() override;
+    void updateState() override;
+    boolean isGameOver() override {
       return state == GameOver;
     }
 
     void frenzyScreen();
-    void gameOverScreen();
+    void gameOverScreen() override;
 
-    Mode getMode() {
+    Mode getMode() override {
       return Classic;
     }
 
@@ -155,7 +161,7 @@ class ModeDebut : public ModeClassic {
       stageReq = req[stage];
     }
 
-    boolean isGameOver() {
+    boolean isGameOver() override {
       return state == GameOver;
     }
 
@@ -169,9 +175,9 @@ class ModeDebut : public ModeClassic {
       updateStage(stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
     }
 
-    void updateState();
+    void updateState() override;
 
-    Mode getMode() {
+    Mode getMode() override {
       return Debut;
     }
 
@@ -200,16 +206,22 @@ class ModeVersus : public Game {
     };
 
     void setupPlayers();
+    void setupGame() override {
+      randomizeTarget(p1->colour, 1);
+      randomizeTarget(p2->colour, 2);
+      state = Init;
+    }
 
-    void clickLogic();
-    void updateState();
-    boolean isGameOver() {
+    void randomizeTarget(CRGB tColour, int player);
+    void clickLogic() override;
+    void updateState() override;
+    boolean isGameOver() override {
       return state == GameOver;
     }
 
     void updateScreenTimeRemaining() {}
     void ongoingScreen();
-    void gameOverScreen();
+    void gameOverScreen() override;
 
     Mode getMode() {
       return Versus;
@@ -217,6 +229,8 @@ class ModeVersus : public Game {
 
   protected:
     State state;
+    // pTarget is used for player 1.
+    byte pTarget2 = -1;
 };
 
 // --------------- Extern Variables ---------------
