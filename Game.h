@@ -5,6 +5,8 @@
 
 //#include <FastLED.h>
 #include "InputHandler.h"
+#include "Player.h"
+#include "Monitor.h"
 
 // ---------- Constants ----------------
 
@@ -33,10 +35,18 @@ enum Mode {
 //  Click, Time
 //};
 
+// -------------------- Function declarations -----------------
+
+void setupGame();
+
+void setBeginMillis();
+Mode indexToMode(int index);
+int getSecondsRemaining();
+
 // ------------------ Classes --------------------
 
 class Game {
-  public:  
+  public:
     byte score = 0;
     byte stage = 0;
     unsigned int stageMs;
@@ -75,11 +85,20 @@ class Game {
     virtual Mode getMode() = 0;
     virtual boolean isGameOver() = 0;
 
+    virtual void updateScreenTimeRemaining() {
+      if (millis() - secTimer > 1000) {
+        secTimer = millis();
+        updateTime(getSecondsRemaining());
+      }
+    }
     //    virtual void runningScreen() = 0;
     virtual void gameOverScreen() = 0;
 
   protected:
     State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
+
+  private:
+    unsigned long secTimer = 0;
 };
 
 
@@ -164,9 +183,11 @@ class ModeDebut : public ModeClassic {
 
 class ModeVersus : public Game {
   public:
-  // "stage" is used as number of rounds
-  
-  // Constructors
+    // "stage" is used as number of rounds
+    Player *p1;
+    Player *p2;
+
+    // Constructors
     ModeVersus() {
       stageMs = 30000;
     }
@@ -178,12 +199,15 @@ class ModeVersus : public Game {
       GameOver
     };
 
+    void setupPlayers();
+
     void clickLogic();
     void updateState();
     boolean isGameOver() {
       return state == GameOver;
     }
 
+    void updateScreenTimeRemaining() {}
     void ongoingScreen();
     void gameOverScreen();
 
@@ -199,13 +223,5 @@ class ModeVersus : public Game {
 
 extern Game *game;
 extern int score;
-
-// -------------------- Function declarations -----------------
-
-void setupGame();
-
-void setBeginMillis();
-Mode indexToMode(int index);
-int getSecondsRemaining();
 
 #endif

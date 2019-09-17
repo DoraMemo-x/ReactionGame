@@ -12,9 +12,10 @@ class Player {
   
     Block *b[NUM_BLOCKS/2];
     byte score = 0;
+    byte wins = 0;
     CRGB colour;
 
-    void addScore();
+    void clickLogic();
 };
 
 

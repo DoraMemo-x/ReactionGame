@@ -1,25 +1,32 @@
 #include "Player.h"
 #include <FastLED.h>
 
-Player *p1 = new Player(CRGB::Red);
-Player *p2 = new Player(CRGB::Blue);
-
-void Player::addScore() {
+void Player::clickLogic() {
   for (byte i = 0; i < NUM_BLOCKS/2; i++) {
     if (this->b[i]->isTriggered()) {
-      this->score++;
+      if (this->b[i]->equals(this->colour)) {
+        this->score++;
+      } else {
+        this->score--;
+      }
     }
   }
 }
 
 
 
-void setupPlayer() {
+void ModeVersus::setupPlayers() {
+  delete this->p1;
+  delete this->p2;
+
+  this->p1 = new Player(CRGB::Red);
+  this->p2 = new Player(CRGB::Blue);
+  
   for (byte i = 0; i < NUM_BLOCKS/2; i++) {
-    p1->b[i] = blocks[i];
+    this->p1->b[i] = blocks[i];
   }
 
   for (byte i = NUM_BLOCKS/2; i < NUM_BLOCKS; i++) {
-    p2->b[i - NUM_BLOCKS/2] = blocks[i];
+    this->p2->b[i - NUM_BLOCKS/2] = blocks[i];
   }
 }

@@ -18,9 +18,6 @@ void setup() {
   showLed();
 }
 
-long timer = 0;
-boolean doPrint = false;
-
 void loop() {
   updateMode();
 
@@ -29,11 +26,8 @@ void loop() {
     game->clickLogic();
     game->updateState();
 
-    if (millis() - timer > 1000) {
-      timer = millis();
-      doPrint = true;
-      updateTime(getSecondsRemaining());
-    } else doPrint = false;
+    game->updateScreenTimeRemaining();
+    
   }
 }
 

@@ -15,14 +15,16 @@ Game *game; // Game base object (pointer) for polymorphism
 /**
    Determine game mode
 */
-void setupGame() {  
+void setupGame() {
   randomSeed(analogRead(A1));
   beginMillis = millis();
 
   Mode m = static_cast<Mode>(modeInput);
 
+  delete game;
+
   switch (m) {
-//    default:
+    //    default:
     case Classic: {
         ModeClassic *mc = new ModeClassic();
         game = mc;
@@ -47,9 +49,11 @@ void setupGame() {
 
     ////////////////////////////
 
-    case Versus:
-
-      break;
+    case Versus: {
+        ModeVersus *mv = new ModeVersus();
+        game = mv;
+        break;
+      }
 
     ////////////////////////////
 

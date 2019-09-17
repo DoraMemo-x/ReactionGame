@@ -136,3 +136,8 @@ void ModeClassic::frenzyScreen() {
 void ModeVersus::ongoingScreen() {
   
 }
+
+void ModeVersus::gameOverScreen() {
+
+  
+}

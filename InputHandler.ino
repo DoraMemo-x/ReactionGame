@@ -7,7 +7,7 @@ static const byte BUTTON_PINS[] = {2, 3, 4, 5, 6, 7}; // NOTE: static use: limit
 static const byte MODE_BUTTON_PIN = A0;
 
 Block *blocks[NUM_BLOCKS];
-byte modeInput = 0;
+byte modeInput = 1;
 static boolean pModeBtnState = false, modeBtnState = false;
 
 
@@ -48,6 +48,8 @@ int Block::getButtonPin() {
 
 void setupInput() {
   for (byte i = 0; i < NUM_BLOCKS; i++) {
+    delete blocks[i];
+    
     pinMode(BUTTON_PINS[i], INPUT);
     digitalWrite(BUTTON_PINS[i], HIGH); // turn on pullup resistor (is this how it's done?)
 
