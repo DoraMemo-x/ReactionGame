@@ -31,7 +31,11 @@ void Player::randomizeTarget() {
   } while (target == pTarget);
 
   if (pTarget != -1) this->b[pTarget]->setColour(CRGB::Black);
-  this->b[target]->setColour(colour);
+  this->b[target]->setColour(this->colour);
+  
+//Serial.print(target);
+//String s = colour.r == 255 ? "Red" : "Blue";
+//Serial.println(s);
 
   pTarget = target;
 }
@@ -39,17 +43,17 @@ void Player::randomizeTarget() {
 
 
 void ModeVersus::setupPlayers() {
-  delete this->p1;
-  delete this->p2;
+  delete p1;
+  delete p2;
 
-  this->p1 = new Player(CRGB::Red);
-  this->p2 = new Player(CRGB::Blue);
+  p1 = new Player(CRGB::Red);
+  p2 = new Player(CRGB::Blue);
 
-  this->p1->scoreReq = this->stageReq;
-  this->p2->scoreReq = this->stageReq;
+  p1->scoreReq = stageReq;
+  p2->scoreReq = stageReq;
 
   for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
-    this->p1->b[i] = blocks[P1_BLOCK_INDEX[i]];
-    this->p2->b[i] = blocks[P2_BLOCK_INDEX[i]];
+    p1->b[i] = blocks[P1_BLOCK_INDEX[i]];
+    p2->b[i] = blocks[P2_BLOCK_INDEX[i]];
   }
 }

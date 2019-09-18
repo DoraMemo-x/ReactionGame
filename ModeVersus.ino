@@ -1,8 +1,10 @@
 #include "Game.h"
 
 void ModeVersus::clickLogic() {  
-  boolean needUpdate = this->p1->clickLogic() || this->p2->clickLogic();
-  if (needUpdate) {
+  boolean p1Clicked = this->p1->clickLogic();
+  boolean p2Clicked = this->p2->clickLogic();
+//  boolean needUpdate = this->p1->clickLogic() || this->p2->clickLogic();
+  if (p1Clicked || p2Clicked) {
     this->ongoingScreen();
   }
 }
