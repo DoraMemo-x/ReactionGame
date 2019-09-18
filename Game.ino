@@ -50,7 +50,7 @@ void setupGame() {
         ModeVersus *mv = new ModeVersus();
         game = mv;
 
-        game->setupGame();
+//        game->setupGame();
         break;
       }
 

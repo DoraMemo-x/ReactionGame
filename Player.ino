@@ -1,16 +1,35 @@
 #include "Player.h"
 #include <FastLED.h>
 
-void Player::clickLogic() {
+/**
+ * @return true as long as clicked - flags as screen update needed
+ */
+boolean Player::clickLogic() {
   for (byte i = 0; i < NUM_BLOCKS/2; i++) {
     if (this->b[i]->isTriggered()) {
       if (this->b[i]->equals(this->colour)) {
         this->score++;
+        this->randomizeTarget();
       } else {
         this->score--;
       }
+      return true;
     }
   }
+
+  return false;
+}
+
+void Player::randomizeTarget() {
+  byte target;
+
+  do {
+    target = byte(random(0, NUM_BLOCKS / 2));
+  } while (target == pTarget);
+
+  this->b[target]->setColour(this->colour);
+
+  this->pTarget = target;
 }
 
 

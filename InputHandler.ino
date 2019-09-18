@@ -78,7 +78,7 @@ void updateMode() {
     setupMonitor();
 
     setBeginMillis();
-    updateTime(getSecondsRemaining());
+//    if (game->getMode() == Classic || game->getMode() == Debut) updateTime(getSecondsRemaining());
 
     showLed();
   }

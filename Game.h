@@ -19,7 +19,7 @@ static const unsigned int DEBUT_STAGE_MS[] = {12500, 18000, 22000};
 static const byte DEBUT_STAGE_REQ[] = {13, 25 + DEBUT_STAGE_REQ[0], 255}; // Accumulative score
 
 static const unsigned int VERSUS_STAGE_MS[] = {20000, 20000, 15000};
-static const byte VERSUS_STAGE_REQ[] = {15, 20, 25}; // Not accumulative.
+static const byte VERSUS_STAGE_REQ[] = {15, 21, 27}; // Not accumulative.
 
 // ----------- Enums --------------
 
@@ -71,7 +71,7 @@ class Game {
       randomizeTarget(CRGB::Green);
       state = Init;
     }
-    
+
     virtual void randomizeTarget(CRGB tColour);
     virtual void clickLogic() = 0;
     virtual void updateState();
@@ -96,7 +96,7 @@ class Game {
         updateTime(getSecondsRemaining());
       }
     }
-    //    virtual void runningScreen() = 0;
+    virtual void ongoingScreen() = 0;
     virtual void gameOverScreen() = 0;
 
   protected:
@@ -133,6 +133,7 @@ class ModeClassic : public Game {
       return state == GameOver;
     }
 
+    void ongoingScreen() override;
     void frenzyScreen();
     void gameOverScreen() override;
 
@@ -190,12 +191,15 @@ class ModeDebut : public ModeClassic {
 class ModeVersus : public Game {
   public:
     // "stage" is used as number of rounds
+    // "score" is unused
+    // "scoreMultiplier" is unused
+    // "scorePenalty" is unused
     Player *p1;
     Player *p2;
 
     // Constructors
     ModeVersus() {
-      stageMs = 30000;
+      setupGame();
     }
 
     // Enums
@@ -207,20 +211,24 @@ class ModeVersus : public Game {
 
     void setupPlayers();
     void setupGame() override {
-      randomizeTarget(p1->colour, 1);
-      randomizeTarget(p2->colour, 2);
+      stage = 0;
+      stageMs = VERSUS_STAGE_REQ[0];
+      setupPlayers();
+      p1->randomizeTarget();
+      p2->randomizeTarget();
       state = Init;
     }
 
-    void randomizeTarget(CRGB tColour, int player);
+    //    void randomizeTarget(int player);
     void clickLogic() override;
     void updateState() override;
     boolean isGameOver() override {
       return state == GameOver;
     }
 
-    void updateScreenTimeRemaining() {}
-    void ongoingScreen();
+    void updateScreenTimeRemaining() override {} // Override to do nothing.
+    void scoreboard(int p1Score, int p2Score);
+    void ongoingScreen() override;
     void gameOverScreen() override;
 
     Mode getMode() {
@@ -229,8 +237,6 @@ class ModeVersus : public Game {
 
   protected:
     State state;
-    // pTarget is used for player 1.
-    byte pTarget2 = -1;
 };
 
 // --------------- Extern Variables ---------------

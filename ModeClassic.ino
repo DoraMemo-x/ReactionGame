@@ -27,7 +27,7 @@ void ModeClassic::clickLogic() {
         delay(25);
       }
 
-      updateScore(score, stageReq);
+      updateScoreMonitor(score, stageReq);
       showLed();
     }
   }
@@ -44,7 +44,8 @@ void ModeClassic::updateState() {
     if (this->score >= this->stageReq) {
       this->stage++;
       this->updateStage(this->stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
-      updateMonitor();
+      
+      this->ongoingScreen();
 
       // Frenzy
       if (this->stage == sizeof(CLASSIC_STAGE_REQ) / sizeof(byte) - 1) {
@@ -70,7 +71,8 @@ void ModeDebut::updateState() {
     if (this->score >= this->stageReq) {
       this->stage++;
       this->updateStage(this->stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
-      updateMonitor();
+      
+      this->ongoingScreen();
 
       beginMillis = millis();
     } else {
