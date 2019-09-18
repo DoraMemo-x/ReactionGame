@@ -8,7 +8,6 @@
 
 void setupLed();
 void showLed();
-void updateLed();
 
 extern CRGB leds[NUM_BLOCKS];
 

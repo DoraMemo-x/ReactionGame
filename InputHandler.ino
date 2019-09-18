@@ -4,7 +4,8 @@
 
 
 static const byte BUTTON_PINS[] = {2, 3, 4, 5, 6, 7}; // NOTE: static use: limit scope
-static const byte MODE_BUTTON_PIN = A0;
+static const byte MODE_BUTTON_PIN = A1;
+static const byte BUZZER_PIN = A2;
 
 Block *blocks[NUM_BLOCKS];
 byte modeInput = 1;
@@ -57,7 +58,8 @@ void setupInput() {
     blocks[i]->setColour(CRGB::Black);
   }
 
-  pinMode(A0, INPUT);
+  pinMode(MODE_BUTTON_PIN, INPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
 }
 
 void lightUp(CRGB colour) {
@@ -68,9 +70,9 @@ void lightUp(CRGB colour) {
 
 void updateMode() {
   pModeBtnState = modeBtnState;
-  modeBtnState = !digitalRead(A0);
+  modeBtnState = !digitalRead(MODE_BUTTON_PIN);
 
-  if (modeBtnState && !pModeBtnState) {
+  if (modeBtnState && !pModeBtnState) {    
     modeInput = (modeInput + 1) % (RETURN);
 
     lightUp(CRGB::Black);
@@ -78,16 +80,15 @@ void updateMode() {
     setupMonitor();
 
     setBeginMillis();
-//    if (game->getMode() == Classic || game->getMode() == Debut) updateTime(getSecondsRemaining());
-
     showLed();
   }
 }
 
-//void storeInputAll(Block *blocks[]) {
-//  for (int i = 0; i < NUM_BLOCKS; i++) {
-//    Block b = *blocks[i];
-//
-//    storeInput(&b);
-//  }
-//}
+void playTone(int _tone, int duration) {
+  for (long i = 0; i < duration * 1000L; i += _tone * 2) {
+    digitalWrite(BUZZER_PIN, HIGH);
+    delayMicroseconds(_tone);
+    digitalWrite(BUZZER_PIN, LOW);
+    delayMicroseconds(_tone);
+  }
+}

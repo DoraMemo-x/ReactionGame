@@ -3,7 +3,6 @@
 void ModeVersus::clickLogic() {  
   boolean p1Clicked = p1->clickLogic();
   boolean p2Clicked = p2->clickLogic();
-//  boolean needUpdate = p1->clickLogic() || p2->clickLogic();
   if (p1Clicked || p2Clicked) {
     this->ongoingScreen();
   }
@@ -41,12 +40,12 @@ void ModeVersus::updateState() {
     // Determine & reflect game over
     if (this->stage == 3 || p1->wins == 2 || p2->wins == 2) {
       state = ModeVersus::State::GameOver;
-      this->gameOverScreen();
+      gameOverScreen();
       return;
     }
 
     // Set time
-    this->stageMs = VERSUS_STAGE_MS[this->stage];
+    stageMs = VERSUS_STAGE_MS[stage];
 
     // Randomize Targets
     p1->randomizeTarget();
@@ -57,8 +56,8 @@ void ModeVersus::updateState() {
     byte offset = 0;
     if (diff >= 5) offset = min(ceil((diff - 5)*0.5), 4);
 
-    p1->scoreReq = VERSUS_STAGE_REQ[this->stage];
-    p2->scoreReq = VERSUS_STAGE_REQ[this->stage];
+    p1->scoreReq = VERSUS_STAGE_REQ[stage];
+    p2->scoreReq = VERSUS_STAGE_REQ[stage];
 
     if (winner == 2) p1 -= offset;
     else if (winner == 1) p2 -= offset;

@@ -3,8 +3,8 @@
 
 #include "InputHandler.h"
 
-static const byte P1_BLOCK_INDEXES[] = {0, 1, 2};
-static const byte P2_BLOCK_INDEXES[] = {3, 4, 5};
+static const byte P1_BLOCK_INDEXES[] = {0, 1, 5};
+static const byte P2_BLOCK_INDEXES[] = {2, 3, 4};
 
 class Player {
   public:
@@ -13,7 +13,6 @@ class Player {
       colour = c;
     }
   
-//    Block *b[NUM_BLOCKS/2];
     byte blockIndexes[NUM_BLOCKS/2];
     byte pTarget = -1;
     

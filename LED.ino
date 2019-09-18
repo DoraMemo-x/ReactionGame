@@ -10,7 +10,3 @@ void setupLed() {
 void showLed() {
   FastLED.show();
 }
-
-void updateLed() {
-  
-}

@@ -6,10 +6,12 @@
 */
 boolean Player::clickLogic() {
   for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
-    blocks[blockIndexes[i]]->storeInput();
+    Block *b = blocks[blockIndexes[i]];
+    
+    b->storeInput();
 
-    if (blocks[blockIndexes[i]]->isTriggered()) {
-      if (blocks[blockIndexes[i]]->equals(colour)) {
+    if (b->isTriggered()) {
+      if (b->equals(colour)) {
         this->score++;
         this->randomizeTarget();
         showLed();

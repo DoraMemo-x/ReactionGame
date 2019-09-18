@@ -15,7 +15,7 @@ Game *game; // Game base object (pointer) for polymorphism
  * Determine game mode
 */
 void determineGameMode() {
-  randomSeed(analogRead(A1));
+  randomSeed(analogRead(A0));
   beginMillis = millis();
 
   Mode m = static_cast<Mode>(modeInput);

@@ -15,7 +15,7 @@ void setup() {
   setBeginMillis();
   updateTime(getSecondsRemaining());
 
-  showLed();
+  showLed();  
 }
 
 void loop() {
