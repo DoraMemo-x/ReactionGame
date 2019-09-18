@@ -1,6 +1,6 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include "Monitor.h"
+#include "LCDMonitor.h"
 #include "Game.h"
 
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
@@ -51,10 +51,15 @@ void setupMonitor() {
   game->ongoingScreen();
 }
 
-void updateTime(int timeRemain) {
-  lcd.setCursor(10, 0);
+void updateTime(byte timeRemain) {
+  updateTime(9, timeRemain);
+}
+
+void updateTime(byte pos, byte timeRemain) {
+  lcd.setCursor(pos, 0);
   lcd.print("        ");
-  lcd.setCursor(10, 0);
+  lcd.setCursor(pos, 0);
+  lcd.print("(");
   lcd.print(timeRemain + 1);
   lcd.print(" s)");
 }
@@ -153,7 +158,9 @@ void ModeVersus::scoreboard(int p1Score, int p2Score) {
   if (p2Score < 10) lcd.setCursor(15, 1);
   else lcd.setCursor(14, 1);
   lcd.print(p2Score);
+}
 
+void ModeVersus::nextRoundScreen() {
   delay(3000);
 
   clearLine(0);
@@ -192,6 +199,8 @@ void ModeVersus::ongoingScreen() {
 }
 
 void ModeVersus::gameOverScreen() {
+  this->scoreboard(this->p1->wins, this->p2->wins);
 
-
+  lcd.setCursor(7, 1);
+  lcd.print("VS");
 }

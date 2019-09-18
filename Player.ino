@@ -2,14 +2,17 @@
 #include <FastLED.h>
 
 /**
- * @return true as long as clicked - flags as screen update needed
- */
+   @return true as long as clicked - flags as screen update needed
+*/
 boolean Player::clickLogic() {
-  for (byte i = 0; i < NUM_BLOCKS/2; i++) {
+  for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
+    this->b[i]->storeInput();
+
     if (this->b[i]->isTriggered()) {
-      if (this->b[i]->equals(this->colour)) {
+      if (this->b[i]->equals(colour)) {
         this->score++;
         this->randomizeTarget();
+        showLed();
       } else {
         this->score--;
       }
@@ -27,9 +30,10 @@ void Player::randomizeTarget() {
     target = byte(random(0, NUM_BLOCKS / 2));
   } while (target == pTarget);
 
-  this->b[target]->setColour(this->colour);
+  if (pTarget != -1) this->b[pTarget]->setColour(CRGB::Black);
+  this->b[target]->setColour(colour);
 
-  this->pTarget = target;
+  pTarget = target;
 }
 
 
@@ -40,12 +44,15 @@ void ModeVersus::setupPlayers() {
 
   this->p1 = new Player(CRGB::Red);
   this->p2 = new Player(CRGB::Blue);
-  
-  for (byte i = 0; i < NUM_BLOCKS/2; i++) {
+
+  this->p1->scoreReq = this->stageReq;
+  this->p2->scoreReq = this->stageReq;
+
+  for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
     this->p1->b[i] = blocks[i];
   }
 
-  for (byte i = NUM_BLOCKS/2; i < NUM_BLOCKS; i++) {
-    this->p2->b[i - NUM_BLOCKS/2] = blocks[i];
+  for (byte i = NUM_BLOCKS / 2; i < NUM_BLOCKS; i++) {
+    this->p2->b[i - NUM_BLOCKS / 2] = blocks[i];
   }
 }

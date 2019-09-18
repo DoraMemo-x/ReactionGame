@@ -34,7 +34,12 @@ void ModeVersus::updateState() {
   if (winner > 0) {
     this->stage++;
 
-    if (this->stage == 3 || p1->wins == 2 || p2->wins == 2) state = ModeVersus::State::GameOver;
+    // Determine & reflect game over
+    if (this->stage == 3 || p1->wins == 2 || p2->wins == 2) {
+      state = ModeVersus::State::GameOver;
+      this->gameOverScreen();
+      return;
+    }
 
     // Set time
     this->stageMs = VERSUS_STAGE_MS[this->stage];
@@ -54,8 +59,9 @@ void ModeVersus::updateState() {
     if (winner == 1) this->p1 += offset;
     else if (winner == 2) this->p2 += offset;
 
-    // Show scoreboard + countdown
+    // Show scoreboard. Countdown & show next game
     this->scoreboard(p1->score, p2->score);
+    this->nextRoundScreen();
     beginMillis = millis();
 
     // Reset score

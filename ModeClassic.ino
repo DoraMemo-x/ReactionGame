@@ -10,7 +10,6 @@ void ModeClassic::clickLogic() {
       if (b->equals(CRGB::Green)) {
         // On CORRECT button click, change target; add 1 score; turn off current light
         score += this->scoreMultiplier;
-        b->setColour(CRGB::Black);
         this->randomizeTarget(CRGB::Green);
 
         delay(20); // delay a bit to avoid bouncing

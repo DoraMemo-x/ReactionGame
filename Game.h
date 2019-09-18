@@ -6,7 +6,7 @@
 //#include <FastLED.h>
 #include "InputHandler.h"
 #include "Player.h"
-#include "Monitor.h"
+#include "LCDMonitor.h"
 
 // ---------- Constants ----------------
 
@@ -37,7 +37,7 @@ enum Mode {
 
 // -------------------- Function declarations -----------------
 
-void setupGame();
+void determineGameMode();
 
 void setBeginMillis();
 Mode indexToMode(int index);
@@ -102,8 +102,6 @@ class Game {
   protected:
     State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
     byte pTarget = -1;
-
-  private:
     unsigned long secTimer = 0;
 };
 
@@ -192,6 +190,7 @@ class ModeVersus : public Game {
   public:
     // "stage" is used as number of rounds
     // "score" is unused
+    // "stageReq" is ONLY used for first round, as a way to pass a common requirement for both players
     // "scoreMultiplier" is unused
     // "scorePenalty" is unused
     Player *p1;
@@ -212,7 +211,8 @@ class ModeVersus : public Game {
     void setupPlayers();
     void setupGame() override {
       stage = 0;
-      stageMs = VERSUS_STAGE_REQ[0];
+      stageMs = VERSUS_STAGE_MS[0];
+      stageReq = VERSUS_STAGE_REQ[0];
       setupPlayers();
       p1->randomizeTarget();
       p2->randomizeTarget();
@@ -226,8 +226,14 @@ class ModeVersus : public Game {
       return state == GameOver;
     }
 
-    void updateScreenTimeRemaining() override {} // Override to do nothing.
+    void updateScreenTimeRemaining() override {
+      if (millis() - secTimer > 1000) {
+        secTimer = millis();
+        updateTime(5, getSecondsRemaining());
+      }
+    }
     void scoreboard(int p1Score, int p2Score);
+    void nextRoundScreen();
     void ongoingScreen() override;
     void gameOverScreen() override;
 

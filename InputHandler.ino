@@ -74,7 +74,7 @@ void updateMode() {
     modeInput = (modeInput + 1) % (RETURN);
 
     lightUp(CRGB::Black);
-    setupGame();
+    determineGameMode();
     setupMonitor();
 
     setBeginMillis();

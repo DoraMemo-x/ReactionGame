@@ -1,7 +1,7 @@
 #include "InputHandler.h"
 #include "LED.h"
 #include "Game.h"
-#include "Monitor.h"
+#include "LCDMonitor.h"
 
 void setup() {
   Serial.begin(9600);
@@ -9,7 +9,7 @@ void setup() {
   setupLed();
   setupInput();
   
-  setupGame();
+  determineGameMode();
   setupMonitor();
 
   setBeginMillis();

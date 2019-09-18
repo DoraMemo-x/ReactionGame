@@ -14,7 +14,7 @@ Game *game; // Game base object (pointer) for polymorphism
 /**
    Determine game mode
 */
-void setupGame() {
+void determineGameMode() {
   randomSeed(analogRead(A1));
   beginMillis = millis();
 
@@ -76,6 +76,7 @@ void Game::randomizeTarget(CRGB tColour) {
     target = byte(random(0, NUM_BLOCKS));
   } while (target == this->pTarget);
 
+  if (pTarget != -1) blocks[pTarget]->setColour(CRGB::Black);
   blocks[target]->setColour(tColour);
 
   pTarget = target;
