@@ -6,15 +6,15 @@
 */
 boolean Player::clickLogic() {
   for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
-    this->b[i]->storeInput();
+    blocks[blockIndexes[i]]->storeInput();
 
-    if (this->b[i]->isTriggered()) {
-      if (this->b[i]->equals(colour)) {
+    if (blocks[blockIndexes[i]]->isTriggered()) {
+      if (blocks[blockIndexes[i]]->equals(colour)) {
         this->score++;
         this->randomizeTarget();
         showLed();
       } else {
-        this->score--;
+        score = max(score-1, 0);
       }
       return true;
     }
@@ -30,8 +30,8 @@ void Player::randomizeTarget() {
     target = byte(random(0, NUM_BLOCKS / 2));
   } while (target == pTarget);
 
-  if (pTarget != -1) this->b[pTarget]->setColour(CRGB::Black);
-  this->b[target]->setColour(this->colour);
+  if (pTarget != -1) blocks[blockIndexes[pTarget]]->setColour(CRGB::Black);
+  blocks[blockIndexes[target]]->setColour(colour);
   
 //Serial.print(target);
 //String s = colour.r == 255 ? "Red" : "Blue";
@@ -53,7 +53,7 @@ void ModeVersus::setupPlayers() {
   p2->scoreReq = stageReq;
 
   for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
-    p1->b[i] = blocks[P1_BLOCK_INDEX[i]];
-    p2->b[i] = blocks[P2_BLOCK_INDEX[i]];
+    p1->blockIndexes[i] = P1_BLOCK_INDEXES[i];
+    p2->blockIndexes[i] = P2_BLOCK_INDEXES[i];
   }
 }
