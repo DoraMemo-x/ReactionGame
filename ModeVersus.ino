@@ -10,8 +10,10 @@ void ModeVersus::clickLogic() {
 }
 
 void ModeVersus::updateState() {
-  byte p1Req = p1->scoreReq - p1->score;
-  byte p2Req = p2->scoreReq - p2->score;
+  byte p1Score = p1->score;
+  byte p2Score = p2->score;
+  byte p1Req = p1->scoreReq - p1Score;
+  byte p2Req = p2->scoreReq - p2Score;
   byte winner = 0;
 
   // Round over check
@@ -47,22 +49,22 @@ void ModeVersus::updateState() {
     this->stageMs = VERSUS_STAGE_MS[this->stage];
 
     // Randomize Targets
-    this->randomizeTarget(1);
-    this->randomizeTarget(2);
+    p1->randomizeTarget();
+    p2->randomizeTarget();
 
     // Adjust score requirement
     byte diff = abs(p1Req - p2Req);
     byte offset = 0;
-    if (diff >= 5) offset = min(5, map(diff, 5, 10, 1, 5));
+    if (diff >= 5) offset = min(ceil((diff - 5)*0.5), 4);
 
     this->p1->scoreReq = VERSUS_STAGE_REQ[this->stage];
     this->p2->scoreReq = VERSUS_STAGE_REQ[this->stage];
 
-    if (winner == 1) this->p1 += offset;
-    else if (winner == 2) this->p2 += offset;
+    if (winner == 2) this->p1 -= offset;
+    else if (winner == 1) this->p2 -= offset;
 
-    // Show scoreboard. Countdown & show next game
-    this->scoreboard(p1->score, p2->score);
+    // Show scoreboard. Countdown & show next round
+    this->scoreboard(p1Score, p2Score);
     this->nextRoundScreen();
     beginMillis = millis();
 

@@ -32,10 +32,10 @@ void setupMonitor() {
 
     ////////////////////////////
 
-    case Colours:
-      lcd.setCursor(5, 0);
-      lcd.print("Colours");
-      break;
+//    case Colours:
+//      lcd.setCursor(5, 0);
+//      lcd.print("Colours");
+//      break;
   }
 
   lcd.setCursor(6, 1);

@@ -27,7 +27,7 @@ enum Mode {
   Classic,
   Debut,
   Versus,
-  Colours,
+//  Colours,
   RETURN
 };
 

@@ -56,9 +56,9 @@ void determineGameMode() {
 
     ////////////////////////////
 
-    case Colours:
-
-      break;
+//    case Colours:
+//
+//      break;
   }
 
   //  game->setState(State::Init);
