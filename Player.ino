@@ -14,7 +14,7 @@ boolean Player::clickLogic() {
       if (b->equals(colour)) {
         this->score++;
         this->randomizeTarget();
-        showLed();
+//        showLed();
       } else {
         score = max(score-1, 0);
       }
@@ -34,6 +34,8 @@ void Player::randomizeTarget() {
 
   if (pTarget != -1) blocks[blockIndexes[pTarget]]->setColour(CRGB::Black);
   blocks[blockIndexes[target]]->setColour(colour);
+
+  showLed();
   
 //Serial.print(target);
 //String s = colour.r == 255 ? "Red" : "Blue";
