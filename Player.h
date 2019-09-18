@@ -26,9 +26,4 @@ class Player {
     void randomizeTarget();
 };
 
-
-
-extern Player *p1;
-extern Player *p2;
-
 #endif

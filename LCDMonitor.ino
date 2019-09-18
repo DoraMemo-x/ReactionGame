@@ -202,7 +202,7 @@ void ModeVersus::ongoingScreen() {
 }
 
 void ModeVersus::gameOverScreen() {
-  this->scoreboard(this->p1->wins, this->p2->wins);
+  this->scoreboard(p1->wins, p2->wins);
 
   lcd.setCursor(7, 1);
   lcd.print("VS");

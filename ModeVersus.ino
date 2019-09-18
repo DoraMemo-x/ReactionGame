@@ -1,9 +1,9 @@
 #include "Game.h"
 
 void ModeVersus::clickLogic() {  
-  boolean p1Clicked = this->p1->clickLogic();
-  boolean p2Clicked = this->p2->clickLogic();
-//  boolean needUpdate = this->p1->clickLogic() || this->p2->clickLogic();
+  boolean p1Clicked = p1->clickLogic();
+  boolean p2Clicked = p2->clickLogic();
+//  boolean needUpdate = p1->clickLogic() || p2->clickLogic();
   if (p1Clicked || p2Clicked) {
     this->ongoingScreen();
   }
@@ -57,21 +57,21 @@ void ModeVersus::updateState() {
     byte offset = 0;
     if (diff >= 5) offset = min(ceil((diff - 5)*0.5), 4);
 
-    this->p1->scoreReq = VERSUS_STAGE_REQ[this->stage];
-    this->p2->scoreReq = VERSUS_STAGE_REQ[this->stage];
+    p1->scoreReq = VERSUS_STAGE_REQ[this->stage];
+    p2->scoreReq = VERSUS_STAGE_REQ[this->stage];
 
-    if (winner == 2) this->p1 -= offset;
-    else if (winner == 1) this->p2 -= offset;
+    if (winner == 2) p1 -= offset;
+    else if (winner == 1) p2 -= offset;
 
     // Show scoreboard. Countdown & show next round
-    this->scoreboard(p1Score, p2Score);
-    this->nextRoundScreen();
+    scoreboard(p1Score, p2Score);
+    nextRoundScreen();
     beginMillis = millis();
 
     // Reset score
-    this->p1->score = 0;
-    this->p2->score = 0;
+    p1->score = 0;
+    p2->score = 0;
 
-    this->ongoingScreen();
+    ongoingScreen();
   }
 }
