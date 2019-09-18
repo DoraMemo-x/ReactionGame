@@ -15,7 +15,7 @@ static const byte CLASSIC_STAGE_REQ[] = {22, 40 + CLASSIC_STAGE_REQ[0], 42 + CLA
 static const byte CLASSIC_SCORE_MULTIPLIER[] = {1, 1, 1, 2};
 static const byte CLASSIC_SCORE_PENALTY[] = {1, 1, 2, 0};
 
-static const unsigned int DEBUT_STAGE_MS[] = {12500, 18000, 22000};
+static const unsigned int DEBUT_STAGE_MS[] = {12500, 18000, 21500};
 static const byte DEBUT_STAGE_REQ[] = {13, 25 + DEBUT_STAGE_REQ[0], 255}; // Accumulative score
 
 static const unsigned int VERSUS_STAGE_MS[] = {20000, 20000, 15000};

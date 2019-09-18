@@ -172,10 +172,13 @@ void ModeVersus::nextRoundScreen() {
 
 void ModeVersus::ongoingScreen() {
   clearLine(1);
-  byte p1FullBlocks = floor(this->p1->scoreReq / 4);
-  byte p1Remain = this->p1->scoreReq % 4;
-  byte p2FullBlocks = floor(this->p2->scoreReq / 4);
-  byte p2Remain = this->p2->scoreReq % 4;
+  byte p1TargetScore = p1->scoreReq - p1->score;
+  byte p2TargetScore = p2->scoreReq - p2->score;
+  
+  byte p1FullBlocks = floor(p1TargetScore / 4);
+  byte p1Remain = p1TargetScore % 4;
+  byte p2FullBlocks = floor(p2TargetScore / 4);
+  byte p2Remain = p2TargetScore % 4;
 
   lcd.setCursor(0, 1);
   for (byte i = 0; i < p1FullBlocks; i++) {

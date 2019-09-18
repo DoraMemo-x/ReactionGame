@@ -12,7 +12,7 @@ static unsigned long beginMillis = -1;
 Game *game; // Game base object (pointer) for polymorphism
 
 /**
-   Determine game mode
+ * Determine game mode
 */
 void determineGameMode() {
   randomSeed(analogRead(A1));

@@ -3,6 +3,9 @@
 
 #include "InputHandler.h"
 
+static const byte P1_BLOCK_INDEX[] = {0, 1, 2};
+static const byte P2_BLOCK_INDEX[] = {3, 4, 5};
+
 class Player {
   public:
     // Constructor

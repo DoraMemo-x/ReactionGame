@@ -49,10 +49,7 @@ void ModeVersus::setupPlayers() {
   this->p2->scoreReq = this->stageReq;
 
   for (byte i = 0; i < NUM_BLOCKS / 2; i++) {
-    this->p1->b[i] = blocks[i];
-  }
-
-  for (byte i = NUM_BLOCKS / 2; i < NUM_BLOCKS; i++) {
-    this->p2->b[i - NUM_BLOCKS / 2] = blocks[i];
+    this->p1->b[i] = blocks[P1_BLOCK_INDEX[i]];
+    this->p2->b[i] = blocks[P2_BLOCK_INDEX[i]];
   }
 }
