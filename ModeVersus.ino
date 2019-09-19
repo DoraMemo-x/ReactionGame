@@ -8,6 +8,9 @@ void ModeVersus::clickLogic() {
   }
 }
 
+/**
+ * Read the comments. It's pretty straightforward
+ */
 void ModeVersus::updateState() {
   byte p1Score = p1->score;
   byte p2Score = p2->score;

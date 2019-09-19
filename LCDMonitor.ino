@@ -5,6 +5,12 @@
 
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
+/**
+ * Shows the current gamemode on LCD monitor,
+ * followed by a short delay, then a countdown.
+ * This shows, for example, "   CLASSIC   ;     MODE     " on the screen (; means new line)
+ * NOTE: This has to be run AFTER determineGameMode().
+ */
 void setupMonitor() {
   lcd.init();
   lcd.backlight();
@@ -43,18 +49,30 @@ void setupMonitor() {
 
   delay(1500);
 
+// TODO: Uncomment this
   //  clearLine(0);
   //  lcd.setCursor(5, 0);
   //  lcd.print("Ready?");
-  //  countdown();
+  //  countdown(); 
 
   game->ongoingScreen();
 }
 
+/**
+ * Updates time remaining on screen (default position on the screen),
+ * in the form "(T s)" where T = timeRemain.
+ * @param timeRemain supplied time remaining parameter
+ */
 void updateTime(byte timeRemain) {
   updateTime(9, timeRemain);
 }
 
+/**
+ * Updates time remaining on screen at specified position pos on the screen,
+ * in the form "(T s)" where T = timeRemain.
+ * @param pos Specified position of where the string "(TT s)" should appear.
+ * @param timeRemain supplied time remaining parameter
+ */
 void updateTime(byte pos, byte timeRemain) {
   lcd.setCursor(pos, 0);
   lcd.print("        ");
@@ -64,6 +82,15 @@ void updateTime(byte pos, byte timeRemain) {
   lcd.print(" s)");
 }
 
+/**
+ * Updates the stage and the current remaining time info on the screen,
+ * in the form "Stage: X (T s)" where X = stage and T = timeRemain.
+ * Currently used by ModeClassic and ModeDebut.
+ * (TODO: Change this to a class method)
+ * (TODO: Change this to only update the stage)
+ * @param stage Current stage
+ * @param timeRemain supplied time remaining parameter
+ */
 void updateStageMonitor(byte stage, int timeRemain) {
   clearLine(0);
   lcd.setCursor(0, 0);
@@ -74,6 +101,9 @@ void updateStageMonitor(byte stage, int timeRemain) {
   lcd.print(" s)");
 }
 
+/**
+ * Updates the score and the score requirement to pass
+ */
 void updateScoreMonitor(int score, int req) {
   clearLine(1);
   lcd.setCursor(0, 1);
@@ -83,11 +113,19 @@ void updateScoreMonitor(int score, int req) {
   lcd.print(req);
 }
 
+/**
+ * Clears one line of the screen.
+ * @param i line number. Can either be 0 or 1 on this 16x2 LCD monitor.
+ */
 static void clearLine(int i) {
   lcd.setCursor(0, i);
   lcd.print("                ");
 }
 
+/**
+ * Initiate a countdown timer on the bottom line of the 16x2 monitor.
+ * The countdown lasts for 3 seconds.
+ */
 void countdown() {
   clearLine(1);
   lcd.setCursor(7, 1);
@@ -101,15 +139,30 @@ void countdown() {
   delay(1000);
 }
 
+/**
+ * TODO: Shows a running text on the screen
+ */
 //void showMonitor(String s) {
 //
 //}
 
+/**
+ * Updates both score and stage listed on the screen.
+ * The text should look like this:
+ * "Stage: 1 (15s)"
+ * "Score: 0/20"
+ */
 void ModeClassic::ongoingScreen() {
   updateStageMonitor(this->stage, getSecondsRemaining());
   updateScoreMonitor(this->score, this->stageReq);
 }
 
+/**
+ * Shows game over stats on the screen.
+ * The text should look like this:
+ * "   Game Over!   "
+ * " Stg 1, 10 pts "
+ */
 void ModeClassic::gameOverScreen() {
   lcd.clear();
   lcd.setCursor(3, 0);
@@ -127,6 +180,12 @@ void ModeClassic::gameOverScreen() {
   if (game->score > 1) lcd.print("s");
 }
 
+/**
+ * Indicates the game state has advanced to Frenzy by showing this text:
+ * "Frenzy!"
+ * "!Sudden Death!",
+ * followed by a 2-second delay, then switches back to the stage and score (ongoing) screen.
+ */
 void ModeClassic::frenzyScreen() {
   lcd.clear();
   lcd.setCursor(4, 0);
@@ -139,6 +198,11 @@ void ModeClassic::frenzyScreen() {
 
 
 
+/**
+ * Shows the result of a 1v1 mode. Indicates the winner by comparing p1Score and p2Score.
+ * @p1Score Score on the left
+ * @p2Score Score on the right
+ */
 void ModeVersus::scoreboard(int p1Score, int p2Score) {
   clearLine(0);
   clearLine(1);
@@ -160,6 +224,11 @@ void ModeVersus::scoreboard(int p1Score, int p2Score) {
   lcd.print(p2Score);
 }
 
+/**
+ * Shows this text before a round starts:
+ * "Round X" where X is the current stage from 1-3.
+ * This is followed by a countdown of 3 seconds.
+ */
 void ModeVersus::nextRoundScreen() {
   delay(3000);
 
@@ -170,6 +239,18 @@ void ModeVersus::nextRoundScreen() {
   countdown();
 }
 
+/**
+ * Shows a "deduct style" of points on screen.
+ * For example, "###*  |####".
+ * Implementation:
+ * The required score is converted to base-4 with these characters:
+ * # = 4
+ * * = 3
+ * + = 2
+ * | = 1.
+ * (Number of strokes on the symbol = its value)
+ * NOTE: This does not do overflow check.
+ */
 void ModeVersus::ongoingScreen() {
   clearLine(1);
   byte p1TargetScore = p1->scoreReq - p1->score;
@@ -201,6 +282,9 @@ void ModeVersus::ongoingScreen() {
   }
 }
 
+/**
+ * Shows the final result of the 1v1 game.
+ */
 void ModeVersus::gameOverScreen() {
   this->scoreboard(p1->wins, p2->wins);
 

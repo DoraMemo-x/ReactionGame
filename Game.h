@@ -22,11 +22,12 @@ static const byte VERSUS_STAGE_REQ[] = {15, 21, 27}; // Not accumulative.
 
 // ----------- Enums --------------
 
+// Available Game Modes
 enum Mode {
   Classic,
   Debut,
   Versus,
-//  Colours,
+  //  Colours,
   RETURN
 };
 
@@ -43,6 +44,34 @@ Mode indexToMode(int index);
 int getSecondsRemaining();
 
 // ------------------ Classes --------------------
+
+/**
+   Notes for implementing a new game mode (as a subclass):
+   1. You MUST override the following functions (basically all virtual functions in Game):
+      a. setupGame()
+         - Put this inside constructor. This MUST HAVE the line state = Init.
+      b. randomizeTarget(...)
+         - Logic for assigning a new target LED.
+         - For consistency, you should turn off the previous LED here.
+         - Remember to do showLed() at the end!
+      c. clickLogic()
+         - Logic for button clicks. See ModeClassic::clickLogic() as an example for what this might contain.
+      d. updateState()
+         - Updates the game state. See ModeClassic::updateState() as an exxample for what this might contain.
+      e. getMode()
+         - return [NEW_MODE_ENUM];
+      f. periodicEvent()
+         - This runs periodically combined with periodicTimer().
+         - The base version updates the time on the screen. Override this if you wish for custom behaviours.
+      g. ongoingScreen()
+         - The "normal" screen
+      h. gameOverScreen()
+         - The game over stats screen
+      i. isGameOver()
+         - return state == GameOver;
+   2. Make a new State enum that contains at least Init, Ongoing, and GameOver.
+   3. updateStage( ... 4 parameters ... ) is already useful as a base function. You can override this but it is not necessary.
+*/
 
 class Game {
   public:
@@ -62,7 +91,7 @@ class Game {
 
     // Constructors
     Game() {
-      state = Init;
+      setupGame();
     }
 
     // Function declarations
@@ -71,9 +100,17 @@ class Game {
       state = Init;
     }
 
+    virtual boolean periodicTimer(unsigned long period) final {
+      if (millis() - periodTimer >= period) {
+        periodTimer = millis();
+        return true;
+      }
+      return false;
+    }
+
     virtual void randomizeTarget(CRGB tColour);
     virtual void clickLogic() = 0;
-    virtual void updateState();
+    virtual void updateState() = 0;
     virtual void updateStage(byte stage, const unsigned int ms[], const byte req[], const byte multi[], const byte penalty[]) {
       stageMs = ms[stage];
       stageReq = req[stage];
@@ -89,11 +126,8 @@ class Game {
     virtual Mode getMode() = 0;
     virtual boolean isGameOver() = 0;
 
-    virtual void updateScreenTimeRemaining() {
-      if (millis() - secTimer > 1000) {
-        secTimer = millis();
-        updateTime(getSecondsRemaining());
-      }
+    virtual void periodicEvent() {
+      updateTime(getSecondsRemaining());
     }
     virtual void ongoingScreen() = 0;
     virtual void gameOverScreen() = 0;
@@ -101,7 +135,7 @@ class Game {
   protected:
     State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
     byte pTarget = -1;
-    unsigned long secTimer = 0;
+    unsigned long periodTimer = 0;
 };
 
 
@@ -110,10 +144,7 @@ class ModeClassic : public Game {
   public:
     // Constructors
     ModeClassic() {
-      state = Init;
-      stage = 0;
-      score = 0;
-      updateStage(stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
+      setupGame();
     }
 
     // Enums
@@ -123,6 +154,13 @@ class ModeClassic : public Game {
       Frenzy,
       GameOver
     };
+
+    void setupGame() override {
+      stage = 0;
+      score = 0;
+      updateStage(stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
+      state = Init;
+    }
 
     void clickLogic() override;
     void updateState() override;
@@ -154,6 +192,20 @@ class ModeDebut : public ModeClassic {
       GameOver
     };
 
+    // Constructors
+    ModeDebut() {
+      setupGame();
+    }
+
+    void setupGame() override {
+      state = Init;
+      stage = 0;
+      score = 0;
+      scoreMultiplier = 1;
+      scorePenalty = 1;
+      updateStage(stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
+    }
+
     void updateStage(byte stage, const unsigned int ms[], const byte req[]) {
       stageMs = ms[stage];
       stageReq = req[stage];
@@ -161,16 +213,6 @@ class ModeDebut : public ModeClassic {
 
     boolean isGameOver() override {
       return state == GameOver;
-    }
-
-    // Constructors
-    ModeDebut() {
-      state = Init;
-      stage = 0;
-      score = 0;
-      scoreMultiplier = 1;
-      scorePenalty = 1;
-      updateStage(stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
     }
 
     void updateState() override;
@@ -218,18 +260,14 @@ class ModeVersus : public Game {
       state = Init;
     }
 
-    //    void randomizeTarget(int player);
     void clickLogic() override;
     void updateState() override;
     boolean isGameOver() override {
       return state == GameOver;
     }
 
-    void updateScreenTimeRemaining() override {
-      if (millis() - secTimer > 1000) {
-        secTimer = millis();
-        updateTime(5, getSecondsRemaining());
-      }
+    void periodicEvent() override {
+      updateTime(5, getSecondsRemaining());
     }
     void scoreboard(int p1Score, int p2Score);
     void nextRoundScreen();

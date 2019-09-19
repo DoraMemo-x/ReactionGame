@@ -8,14 +8,14 @@ void setup() {
 
   setupLed();
   setupBoard();
-  
+
   determineGameMode();
   setupMonitor();
 
   setBeginMillis();
   updateTime(getSecondsRemaining());
 
-  showLed();  
+  showLed();
 }
 
 void loop() {
@@ -26,7 +26,9 @@ void loop() {
     game->clickLogic();
     game->updateState();
 
-    game->updateScreenTimeRemaining();
+    if (game->periodicTimer(1000)) {
+      game->periodicEvent();
+    }
   }
 }
 

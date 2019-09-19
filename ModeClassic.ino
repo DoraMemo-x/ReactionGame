@@ -1,5 +1,19 @@
 #include "Game.h"
 
+/**
+ * Performs the logic check when a button is clicked.
+ * First log the state of all buttons, then check if a button is triggered.
+ * If so and the LED next to the button (bundled in a Block structure) is lit up green,
+ * then:
+ * 1. Add score
+ * 2. Randomize target (and turn off previous target)
+ * otherwise:
+ * 1. Deduct score
+ * 2. If current game state is Frenzy, changes state to game over upon wrong click (Insta-death).
+ * Finally:
+ * 1. Update the monitor to reflect new score
+ * 2. Updates leds (showLed()) regardless
+ */
 void ModeClassic::clickLogic() {
   for (byte i = 0; i < NUM_BLOCKS; i++) {
     Block *b = blocks[i];
@@ -35,6 +49,24 @@ void ModeClassic::clickLogic() {
 /**
    Determines game state (Win/Loss, Advance to next stage, etc.)
    and reflect the suitable changes.
+
+   Implementation:
+   This only runs under two conditions:
+   1. Not game over
+   2. Time's up for current stage.
+   When these two conditions are satisfied, check whether player has reached the stage requirement score.
+   If yes,
+   1. Advance to next stage and reflect new requirements (updateStage()).
+   2. Updates screen to reflect these changes.
+   AND IF the new stage is the last stage,
+   i. Change state to Frenzy
+   ii. Plays the Frenzy intro screen
+   Lastly,
+   3. Changes beginMillis to millis(). (beginMillis is the "beginning time of the current stage")
+
+   Otherwise (score not above requirement),
+   1. Change state to Game Over
+   2. Shows the game over screen.
 */
 void ModeClassic::updateState() {
   // Time's up
@@ -53,7 +85,7 @@ void ModeClassic::updateState() {
         this->frenzyScreen();
       }
 
-      beginMillis = millis();
+      beginMillis = millis(); // Note: VERY IMPORTANT
     } else {
       this->state = ModeClassic::State::GameOver;
       // Play Game Over Screen
@@ -63,6 +95,9 @@ void ModeClassic::updateState() {
 }
 
 // ----------- Debut ------------
+/**
+ * Identical to ModeClassic's updateState() function but with Frenzy checek stripped out.
+ */
 void ModeDebut::updateState() {
   // Time's up
   if (this->state != ModeDebut::State::GameOver && millis() - beginMillis > this->stageMs) {

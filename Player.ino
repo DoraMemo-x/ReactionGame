@@ -36,10 +36,6 @@ void Player::randomizeTarget() {
   blocks[blockIndexes[target]]->setColour(colour);
 
   showLed();
-  
-//Serial.print(target);
-//String s = colour.r == 255 ? "Red" : "Blue";
-//Serial.println(s);
 
   pTarget = target;
 }

@@ -3,6 +3,7 @@
 
 #include "BoardHandler.h"
 
+// NOTE: These range from 0 to 5. They are INDEXES of BLOCKS, not pins.
 static const byte P1_BLOCK_INDEXES[] = {0, 1, 5};
 static const byte P2_BLOCK_INDEXES[] = {2, 3, 4};
 

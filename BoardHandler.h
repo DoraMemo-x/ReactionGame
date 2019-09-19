@@ -42,9 +42,11 @@ class Block {
 extern Block *blocks[NUM_BLOCKS];
 extern byte modeInput;
 
-// ---------------- Function Prototypes ---------------
+// ---------------- Function Declarations ---------------
 
 void setupBoard();
+
+void updateMode();
 
 void playTone(int _tone, int duration);
 //void storeInputAll(Block *blocks[]); // NOTE: This doesn't work for some reason. Althought explicitly stated the parameter is Block*[], it gets converted to Block**.

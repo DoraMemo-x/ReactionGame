@@ -30,7 +30,7 @@ void determineGameMode() {
         game = mc;
         game->score = 100;
 
-        game->setupGame();
+//        game->setupGame();
         break;
       }
 
@@ -41,7 +41,7 @@ void determineGameMode() {
         game = md;
         game->score = 90;
 
-        game->setupGame();
+//        game->setupGame();
         break;
       }
 
