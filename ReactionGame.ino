@@ -1,4 +1,4 @@
-#include "InputHandler.h"
+#include "BoardHandler.h"
 #include "LED.h"
 #include "Game.h"
 #include "LCDMonitor.h"
@@ -7,7 +7,7 @@ void setup() {
   Serial.begin(9600);
 
   setupLed();
-  setupInput();
+  setupBoard();
   
   determineGameMode();
   setupMonitor();

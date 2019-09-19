@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "LED.h"
-#include "InputHandler.h"
+#include "BoardHandler.h"
 
 // ---------- Constants ----------------
 
@@ -12,7 +12,8 @@ static unsigned long beginMillis = -1;
 Game *game; // Game base object (pointer) for polymorphism
 
 /**
- * Determine game mode
+ * Determines game mode.
+ * This has to be run BEFORE setupMonitor().
 */
 void determineGameMode() {
   randomSeed(analogRead(A0));
@@ -65,10 +66,10 @@ void determineGameMode() {
 }
 
 /**
-   Choose a new random target that does not equal to the previous target,
-   in the range of 0 ~ NUM_BLOCKS.
-   Sets the colour of the target block's led to specified tColour
-   @param tColour the colour of the target block's led
+ * Choose a new random target that isn't the same as the previous target,
+ * in the range of 0 ~ NUM_BLOCKS.
+ * Sets the colour of the target block's led to specified tColour
+ * @param tColour the colour of the target block's led
 */
 void Game::randomizeTarget(CRGB tColour) {
   byte target;
@@ -86,6 +87,9 @@ void Game::randomizeTarget(CRGB tColour) {
 
 
 
+/**
+ * 
+ */
 void setBeginMillis() {
   beginMillis = millis();
 }

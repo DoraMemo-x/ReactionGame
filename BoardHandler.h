@@ -1,5 +1,5 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef BOARD_H
+#define BOARD_H
 
 // ---------- Includes -------------
 
@@ -11,7 +11,7 @@
 
 // --------------- Classes -------------------
 /**
-   A Block is made up of the button itself and the corresponding LED.
+ * A Block is made up of the button itself and the corresponding LED.
 */
 class Block {
   public:
@@ -44,7 +44,7 @@ extern byte modeInput;
 
 // ---------------- Function Prototypes ---------------
 
-void setupInput();
+void setupBoard();
 
 void playTone(int _tone, int duration);
 //void storeInputAll(Block *blocks[]); // NOTE: This doesn't work for some reason. Althought explicitly stated the parameter is Block*[], it gets converted to Block**.

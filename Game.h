@@ -3,8 +3,7 @@
 
 // ---------- Includes -------------
 
-//#include <FastLED.h>
-#include "InputHandler.h"
+#include "BoardHandler.h"
 #include "Player.h"
 #include "LCDMonitor.h"
 

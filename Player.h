@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "InputHandler.h"
+#include "BoardHandler.h"
 
 static const byte P1_BLOCK_INDEXES[] = {0, 1, 5};
 static const byte P2_BLOCK_INDEXES[] = {2, 3, 4};

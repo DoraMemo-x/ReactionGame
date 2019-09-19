@@ -1,5 +1,5 @@
 #include "LED.h"
-#include "InputHandler.h"
+#include "BoardHandler.h"
 
 CRGB leds[NUM_BLOCKS];
 
