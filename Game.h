@@ -136,7 +136,7 @@ class Game {
     virtual void gameOverScreen() = 0;
 
   protected:
-    State state; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
+    State state = Init; // NOTE: Necessary to write this in inherited classes, unless the State enum didn't get overriden
     byte pTarget = -1;
     unsigned long periodTimer = 0;
 };
@@ -163,6 +163,7 @@ class ModeClassic : public Game {
       score = 0;
       updateStage(stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
       state = Init;
+      randomizeTarget(CRGB::Green);
     }
 
     void clickLogic() override;
@@ -181,7 +182,7 @@ class ModeClassic : public Game {
 
 
   protected:
-    State state;
+    State state = Init;
 };
 
 
@@ -207,6 +208,7 @@ class ModeDebut : public ModeClassic {
       scoreMultiplier = 1;
       scorePenalty = 1;
       updateStage(stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
+      randomizeTarget(CRGB::Green);
     }
 
     void updateStage(byte stage, const unsigned int ms[], const byte req[]) {
@@ -225,7 +227,7 @@ class ModeDebut : public ModeClassic {
     }
 
   protected:
-    State state;
+    State state = Init;
 };
 
 
@@ -254,6 +256,7 @@ class ModeVersus : public Game {
 
     void setupPlayers();
     void setupGame() override {
+      lightUp(CRGB::Black);
       stage = 0;
       stageMs = VERSUS_STAGE_MS[0];
       stageReq = VERSUS_STAGE_REQ[0];
@@ -282,7 +285,7 @@ class ModeVersus : public Game {
     }
 
   protected:
-    State state;
+    State state = Init;
 };
 
 // --------------- Extern Variables ---------------

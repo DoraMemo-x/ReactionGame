@@ -40,8 +40,8 @@ void ModeVersus::updateState() {
   if (winner > 0) {
     stage++;
 
-    // Determine & reflect game over
-    if (stage == 3 || p1->wins == 2 || p2->wins == 2) {
+    // Forcefully change to game over if 3 stages have passed. Reflect game over
+    if (stage == 3) {
       state = ModeVersus::State::GameOver;
       gameOverScreen();
       return;
@@ -65,8 +65,17 @@ void ModeVersus::updateState() {
     if (winner == 2) p1->scoreReq -= offset;
     else if (winner == 1) p2->scoreReq -= offset;
 
-    // Show scoreboard. Countdown & show next round
+    // Show scoreboard.
     scoreboard(p1Score, p2Score);
+
+    // Finally, show game over screen if someone has won
+    // (This is done here to show the score of the previous round.)
+    if (p1->wins == 2 || p2->wins == 2) {
+      state = ModeVersus::State::GameOver;
+      gameOverScreen();
+    }
+
+    // Countdown & show next round
     nextRoundScreen();
     beginMillis = millis();
 

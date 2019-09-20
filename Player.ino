@@ -12,9 +12,8 @@ boolean Player::clickLogic() {
 
     if (b->isTriggered()) {
       if (b->equals(colour)) {
-        this->score++;
-        this->randomizeTarget();
-//        showLed();
+        score++;
+        randomizeTarget();
       } else {
         score = max(score-1, 0);
       }
@@ -32,7 +31,9 @@ void Player::randomizeTarget() {
     target = byte(random(0, NUM_BLOCKS / 2));
   } while (target == pTarget);
 
-  if (pTarget != -1) blocks[blockIndexes[pTarget]]->setColour(CRGB::Black);
+  if (target == 0 && pTarget == 255 && colour.r == 255) target = 1;
+
+  if (pTarget != 255) blocks[blockIndexes[pTarget]]->setColour(CRGB::Black);
   blocks[blockIndexes[target]]->setColour(colour);
 
   showLed();

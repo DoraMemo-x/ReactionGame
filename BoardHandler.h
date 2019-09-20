@@ -46,6 +46,7 @@ extern byte modeInput;
 
 void setupBoard();
 
+void lightUp(CRGB colour);
 void updateMode();
 
 void playTone(int _tone, int duration);

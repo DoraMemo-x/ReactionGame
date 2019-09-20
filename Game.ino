@@ -11,12 +11,17 @@ static unsigned long beginMillis = -1;
 // Game Variables (Variables that are native to game logic)
 Game *game; // Game base object (pointer) for polymorphism
 
+int seed = 0;
+
 /**
  * Determines game mode.
  * This has to be run BEFORE setupMonitor().
 */
 void determineGameMode() {
-  randomSeed(analogRead(A0));
+//  seed = analogRead(A0);
+//seed++;
+  randomSeed(86);
+//  randomSeed(seed);
   beginMillis = millis();
 
   Mode m = static_cast<Mode>(modeInput);
@@ -29,8 +34,6 @@ void determineGameMode() {
         ModeClassic *mc = new ModeClassic();
         game = mc;
         game->score = 100;
-
-//        game->setupGame();
         break;
       }
 
@@ -40,20 +43,15 @@ void determineGameMode() {
         ModeDebut *md = new ModeDebut();
         game = md;
         game->score = 90;
-
-//        game->setupGame();
         break;
       }
 
     ////////////////////////////
 
+//default:
     case Versus: {
-        lightUp(CRGB::Black);
         ModeVersus *mv = new ModeVersus();
         game = mv;
-        
-
-//        game->setupGame();
         break;
       }
 
@@ -65,7 +63,6 @@ void determineGameMode() {
   }
 
   game->restartPeriodTimer();
-  //  game->setState(State::Init);
 }
 
 /**
@@ -78,7 +75,7 @@ void Game::randomizeTarget(CRGB tColour) {
   byte target;
   do {
     target = byte(random(0, NUM_BLOCKS));
-  } while (target == this->pTarget);
+  } while (target == pTarget);
 
   if (pTarget != -1) blocks[pTarget]->setColour(CRGB::Black);
   blocks[target]->setColour(tColour);
