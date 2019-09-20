@@ -17,7 +17,7 @@ static const byte CLASSIC_SCORE_PENALTY[] = {1, 1, 2, 0};
 static const unsigned int DEBUT_STAGE_MS[] = {12500, 18000, 21500};
 static const byte DEBUT_STAGE_REQ[] = {13, 25 + DEBUT_STAGE_REQ[0], 255}; // Accumulative score
 
-static const unsigned int VERSUS_STAGE_MS[] = {4000, 5000, 6000};
+static const unsigned int VERSUS_STAGE_MS[] = {20000, 20000, 15000};
 static const byte VERSUS_STAGE_REQ[] = {15, 21, 27}; // Not accumulative.
 
 // ----------- Enums --------------

@@ -1,6 +1,6 @@
 #include "Game.h"
 
-void ModeVersus::clickLogic() {  
+void ModeVersus::clickLogic() {
   boolean p1Clicked = p1->clickLogic();
   boolean p2Clicked = p2->clickLogic();
   if (p1Clicked || p2Clicked) {
@@ -9,8 +9,8 @@ void ModeVersus::clickLogic() {
 }
 
 /**
- * Read the comments. It's pretty straightforward
- */
+   Read the comments. It's pretty straightforward
+*/
 void ModeVersus::updateState() {
   byte p1Score = p1->score;
   byte p2Score = p2->score;
@@ -38,14 +38,6 @@ void ModeVersus::updateState() {
   // Resetting round
 
   if (winner > 0) {
-    Serial.print("Winner = ");
-    Serial.println(winner);
-    Serial.print("Round Wins: ");
-    Serial.print(p1->wins);
-    Serial.println(p2->wins);
-    Serial.print("Next stage: ");
-    Serial.println(stage + 1);
-    
     stage++;
 
     // Determine & reflect game over
@@ -65,13 +57,13 @@ void ModeVersus::updateState() {
     // Adjust score requirement
     byte diff = abs(p1Req - p2Req);
     byte offset = 0;
-    if (diff >= 5) offset = min(ceil((diff - 5)*0.5), 4);
+    if (diff >= 4) offset = min(ceil((diff - 4) * 0.75), 4);
 
     p1->scoreReq = VERSUS_STAGE_REQ[stage];
     p2->scoreReq = VERSUS_STAGE_REQ[stage];
 
-    if (winner == 2) p1 -= offset;
-    else if (winner == 1) p2 -= offset;
+    if (winner == 2) p1->scoreReq -= offset;
+    else if (winner == 1) p2->scoreReq -= offset;
 
     // Show scoreboard. Countdown & show next round
     scoreboard(p1Score, p2Score);
