@@ -16,7 +16,7 @@ static boolean pModeBtnState = false, modeBtnState = false;
 Block::Block(int btn, int led) {
   buttonPin = btn;
   ledIndex = led;
-  this->colour = CRGB::Black;
+  colour = CRGB::Black;
 }
 
 /**
@@ -24,7 +24,7 @@ Block::Block(int btn, int led) {
    (triggered definition: previously UP, currently DOWN)
 */
 boolean Block::isTriggered() {
-  return this->btnState && !this->pBtnState;
+  return btnState && !pBtnState;
 }
 
 /**
@@ -51,8 +51,8 @@ boolean Block::equals(CRGB colour) {
    Logs the button state of the Block.
 */
 void Block::storeInput() {
-  this->pBtnState = this->btnState;
-  this->btnState = !digitalRead(this->getButtonPin()); // Note: digitalRead returns TRUE on LOW.
+  pBtnState = btnState;
+  btnState = !digitalRead(getButtonPin()); // Note: digitalRead returns TRUE on LOW.
 }
 
 /**

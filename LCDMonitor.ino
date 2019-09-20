@@ -153,8 +153,8 @@ void countdown() {
    "Score: 0/20"
 */
 void ModeClassic::ongoingScreen() {
-  updateStageMonitor(this->stage, getSecondsRemaining());
-  updateScoreMonitor(this->score, this->stageReq);
+  updateStageMonitor(stage, getSecondsRemaining());
+  updateScoreMonitor(score, stageReq);
 }
 
 /**
@@ -193,7 +193,7 @@ void ModeClassic::frenzyScreen() {
   lcd.setCursor(1, 1);
   lcd.print("!Sudden Death!");
   delay(2000);
-  this->ongoingScreen();
+  ongoingScreen();
 }
 
 
@@ -235,7 +235,7 @@ void ModeVersus::nextRoundScreen() {
   clearLine(0);
   lcd.setCursor(4, 0);
   lcd.print("Round ");
-  lcd.print(this->stage + 1);
+  lcd.print(stage + 1);
   countdown();
   lcd.clear();
 }

@@ -4,7 +4,7 @@ void ModeVersus::clickLogic() {
   boolean p1Clicked = p1->clickLogic();
   boolean p2Clicked = p2->clickLogic();
   if (p1Clicked || p2Clicked) {
-    this->ongoingScreen();
+    ongoingScreen();
   }
 }
 
