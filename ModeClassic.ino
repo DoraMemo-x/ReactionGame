@@ -23,20 +23,20 @@ void ModeClassic::clickLogic() {
     if (b->isTriggered()) {
       if (b->equals(CRGB::Green)) {
         // On CORRECT button click, change target; add 1 score; turn off current light
-        score += this->scoreMultiplier;
-        this->randomizeTarget(CRGB::Green);
+        score += scoreMultiplier;
+        randomizeTarget(CRGB::Green);
 
         delay(20); // delay a bit to avoid bouncing
       } else {
         // On WRONG click, remove score, incur minor delay
         if (state == ModeClassic::State::Frenzy) {
-          this->state = ModeClassic::State::GameOver;
+          state = ModeClassic::State::GameOver;
           // Play Game Over Screen
-          this->gameOverScreen();
+          gameOverScreen();
           return;
         }
 
-        score = max(score - this->scorePenalty, 0);
+        score = max(score - scorePenalty, 0);
         delay(25);
       }
 
@@ -70,27 +70,29 @@ void ModeClassic::clickLogic() {
 */
 void ModeClassic::updateState() {
   // Time's up
-  if (this->state != ModeClassic::State::GameOver && millis() - beginMillis > this->stageMs) {
+  if (state != ModeClassic::State::GameOver && millis() - beginMillis >= stageMs) {
     // Advance_stage or Game Over
-    if (this->score >= this->stageReq) {
-      this->stage++;
-      this->updateStage(this->stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
+    if (score >= stageReq) {
+      stage++;
+      updateStage(stage, CLASSIC_STAGE_MS, CLASSIC_STAGE_REQ, CLASSIC_SCORE_MULTIPLIER, CLASSIC_SCORE_PENALTY);
       
-      this->ongoingScreen();
+      ongoingScreen();
 
       // Frenzy
-      if (this->stage == sizeof(CLASSIC_STAGE_REQ) / sizeof(byte) - 1) {
-        this->state = ModeClassic::State::Frenzy;
+      if (stage == sizeof(CLASSIC_STAGE_REQ) / sizeof(byte) - 1) {
+        state = ModeClassic::State::Frenzy;
         // Play Frenzy monitor
-        this->frenzyScreen();
+        frenzyScreen();
       }
 
       beginMillis = millis(); // Note: VERY IMPORTANT
     } else {
-      this->state = ModeClassic::State::GameOver;
+      state = ModeClassic::State::GameOver;
       // Play Game Over Screen
-      this->gameOverScreen();
+      gameOverScreen();
     }
+
+    restartPeriodTimer();
   }
 }
 
@@ -100,19 +102,21 @@ void ModeClassic::updateState() {
  */
 void ModeDebut::updateState() {
   // Time's up
-  if (this->state != ModeDebut::State::GameOver && millis() - beginMillis > this->stageMs) {
+  if (state != ModeDebut::State::GameOver && millis() - beginMillis >= stageMs) {
     // Advance_stage or Game Over
-    if (this->score >= this->stageReq) {
-      this->stage++;
-      this->updateStage(this->stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
+    if (score >= stageReq) {
+      stage++;
+      updateStage(stage, DEBUT_STAGE_MS, DEBUT_STAGE_REQ);
       
-      this->ongoingScreen();
+      ongoingScreen();
 
       beginMillis = millis();
     } else {
-      this->state = ModeDebut::State::GameOver;
+      state = ModeDebut::State::GameOver;
       // Play Game Over Screen
-      this->gameOverScreen();
+      gameOverScreen();
     }
+    
+    restartPeriodTimer();
   }
 }

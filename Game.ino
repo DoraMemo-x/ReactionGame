@@ -64,6 +64,7 @@ void determineGameMode() {
 //      break;
   }
 
+  game->restartPeriodTimer();
   //  game->setState(State::Init);
 }
 

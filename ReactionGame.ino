@@ -26,7 +26,7 @@ void loop() {
     game->clickLogic();
     game->updateState();
 
-    if (game->periodicTimer(1000)) {
+    if (game->periodicTimer(500)) {
       game->periodicEvent();
     }
   }

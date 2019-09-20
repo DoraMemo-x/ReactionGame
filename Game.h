@@ -117,6 +117,9 @@ class Game {
       scoreMultiplier = multi[stage];
       scorePenalty = penalty[stage];
     }
+    void restartPeriodTimer() {
+      periodTimer = millis();
+    }
     void setState(State newState) {
       state = newState;
     }

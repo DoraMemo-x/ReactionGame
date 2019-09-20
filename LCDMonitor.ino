@@ -288,7 +288,7 @@ void ModeVersus::ongoingScreen() {
 */
 void ModeVersus::gameOverScreen() {
   // Following line: A "hack" that forces the timer to not overwrite the Game Over text
-  periodTimer = millis();
+  restartPeriodTimer();
 
   scoreboard(p1->wins, p2->wins);
 

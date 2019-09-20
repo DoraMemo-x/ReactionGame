@@ -75,5 +75,7 @@ void ModeVersus::updateState() {
     p2->score = 0;
 
     ongoingScreen();
+
+    restartPeriodTimer();
   }
 }
