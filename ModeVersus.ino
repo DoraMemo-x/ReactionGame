@@ -20,17 +20,17 @@ void ModeVersus::updateState() {
 
   // Round over check
 
-  if (millis() - beginMillis >= this->stageMs) {
+  if (millis() - beginMillis >= stageMs) {
     if (p1->score > p2->score) winner = 1;
     else if (p2->score > p1->score) winner = 2;
     else winner = 3;
   }
 
-  if (p1Req <= 0) {
+  if (p1Req <= 0 || winner == 1) {
     p1->wins++;
     winner = 1;
   }
-  if (p2Req <= 0) {
+  if (p2Req <= 0 || winner == 2) {
     p2->wins++;
     winner = 2;
   }
@@ -38,10 +38,18 @@ void ModeVersus::updateState() {
   // Resetting round
 
   if (winner > 0) {
-    this->stage++;
+    Serial.print("Winner = ");
+    Serial.println(winner);
+    Serial.print("Round Wins: ");
+    Serial.print(p1->wins);
+    Serial.println(p2->wins);
+    Serial.print("Next stage: ");
+    Serial.println(stage + 1);
+    
+    stage++;
 
     // Determine & reflect game over
-    if (this->stage == 3 || p1->wins == 2 || p2->wins == 2) {
+    if (stage == 3 || p1->wins == 2 || p2->wins == 2) {
       state = ModeVersus::State::GameOver;
       gameOverScreen();
       return;

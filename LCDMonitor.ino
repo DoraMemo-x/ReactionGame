@@ -237,6 +237,7 @@ void ModeVersus::nextRoundScreen() {
   lcd.print("Round ");
   lcd.print(this->stage + 1);
   countdown();
+  lcd.clear();
 }
 
 /**
@@ -286,8 +287,11 @@ void ModeVersus::ongoingScreen() {
  * Shows the final result of the 1v1 game.
  */
 void ModeVersus::gameOverScreen() {
-  this->scoreboard(p1->wins, p2->wins);
+  // Following line: A "hack" that forces the timer to not overwrite the Game Over text
+periodTimer = millis();
+  
+  scoreboard(p1->wins, p2->wins);
 
-  lcd.setCursor(7, 1);
-  lcd.print("VS");
+  lcd.setCursor(3, 1);
+  lcd.print("Game Over!");
 }

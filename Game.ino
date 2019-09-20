@@ -48,8 +48,10 @@ void determineGameMode() {
     ////////////////////////////
 
     case Versus: {
+        lightUp(CRGB::Black);
         ModeVersus *mv = new ModeVersus();
         game = mv;
+        
 
 //        game->setupGame();
         break;
