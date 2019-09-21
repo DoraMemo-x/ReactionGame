@@ -1,0 +1,40 @@
+|=====================================|
+| ReactionGame Documentation v190921a |
+|=====================================|
+
+----------------------------
+I. General Coding Techniques
+----------------------------
+- 喺C++度create object需要用到pointer（星星*）。例：
+  Game *game = new Game();
+
+  需要access呢個object既變數／function既話，可以用指嘴。例：
+  byte score = game->score;
+  game->clickLogic();
+
+----------------------------------------
+II. ReactionGame-specific Implementation
+----------------------------------------
+掣後面既標籤有3行資料：
+INDEX    : *blocks[] array的index（See BoardHandler）
+PIN      : Arduino的pin（Constant. BUTTON_PINS[]）
+RED/BLUE : 只限對戰模式。紅色係P1、藍色係P2。（Constant. P1_BLOCK_INDEXES, P2_BLOCK_INDEXES）
+
+-------------------
+III. Code Variables
+-------------------
+- class Block: 將button同led放埋一齊既class。
+- class Game: 開發其他game mode既Parent class。
+              有需要可以參考code入面既comment，開發game mode需要寫(override)咩function。
+- class Player: Hard code左只有3個Block既class。可以考慮改一改呢個class，再放入class Game。
+                （Player有score, pTarget等等既變數。class Game一樣有。）
+
+---------
+IV. Misc.
+---------
+- Buzzer可以用playTone()黎響，但注意，響緊=delay緊。而家都冇用到buzzer。
+- Hardware limitation: 禁掣既左下角／右下角會觸發幾次。
+  有可能啲掣太舊，或者佢本身設計就係咁。
+- Hardware: 塊版上面總共有10個窿位，可以換button同led既位置。只需要將button同led換個位就ok。
+  （Program唔洗改野，應該。）
+- Software bug: 喺轉round既時候，倒計時會閃過一下錯既時間。
